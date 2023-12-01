@@ -20,8 +20,21 @@ public function importJsonFile($path){
                     'message' => "Unable to read JSON file",
                 ];
                 
-            }           
-            Article::insert(json_decode($jsonContent, true));
+            }       
+            
+            $articles = json_decode($jsonContent, true);
+           
+            
+            $filteredArticles = [];
+            foreach ($articles as $article) {
+                if (isset($article['title']) && !empty($article['title']) &&
+                    isset($article['content']) && !empty($article['content'])) {
+                    $filteredArticles[] = $article;
+                }
+            }
+            
+
+            Article::insert($filteredArticles);
             return [
                 'status' => 'success',
                 'message' => "JSON file  successfully imported.",
